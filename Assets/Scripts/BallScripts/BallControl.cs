@@ -4,8 +4,8 @@ using UnityEngine;
 public class TopKontrol : MonoBehaviour
 {
     [Header("Fırlatma Ayarları")]
-    public float gucCarpani = 3f; // İtekleme gücünü buradan ayarlayabilirsin
-    public float maksimumGuc = 20f; // Topun çok hızlanmasını önlemek için sınır
+    public float gucCarpani = 8f;        // Topun fırlama gücü
+    public float maksimumGuc = 40f;      // Maksimum fırlatma kuvveti sınırı
 
     private Rigidbody2D rb;
     private Vector2 baslangicNoktasi;
@@ -16,13 +16,11 @@ public class TopKontrol : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Ekranda topun üzerine dokunulduğunda çalışır
     void OnMouseDown()
     {
         baslangicNoktasi = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 
-    // Parmağı (veya tıklamayı) bıraktığında çalışır
     void OnMouseUp()
     {
         bitisNoktasi = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -30,10 +28,13 @@ public class TopKontrol : MonoBehaviour
         // Parmağın sürüklendiği yönü ve mesafeyi hesapla
         Vector2 yonVeMesafe = bitisNoktasi - baslangicNoktasi;
 
-        // Kuvveti sınırla (Çok uzun kaydırmalarda top uzaya uçmasın)
+        // Uygulanacak kuvveti belirle ve sınırla
         Vector2 uygulananKuvvet = Vector2.ClampMagnitude(yonVeMesafe * gucCarpani, maksimumGuc);
 
-        // Topa anlık fiziksel bir darbe (Impulse) uygula
+        // 1. Topun o anki durgun durumunu sıfırla
+        rb.linearVelocity = Vector2.zero;
+
+        // 2. Kuvveti SADECE VE SADECE bu topa uygula
         rb.AddForce(uygulananKuvvet, ForceMode2D.Impulse);
     }
 }

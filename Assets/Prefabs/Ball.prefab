@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d60a354385fe31740b919e64e654f316, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectionRadius: 0.4
+  detectionRadius: 0.3
 --- !u!114 &-6187433740646446419
 MonoBehaviour:
   m_ObjectHideFlags: 0

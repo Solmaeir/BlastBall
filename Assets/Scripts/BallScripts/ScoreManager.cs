@@ -53,6 +53,14 @@ public class ScoreManager : MonoBehaviour
         UpdateUI();
     }
 
+    public void ResetScore()
+    {
+        score = 0;
+        currentLevel = 1;
+        popsInCurrentLevel = 0;
+        UpdateUI();
+    }
+
     private void LevelUp()
     {
         popsInCurrentLevel = 0; // Yeni seviye için sayacı sıfırla

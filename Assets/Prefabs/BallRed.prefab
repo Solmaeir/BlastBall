@@ -17,24 +17,32 @@ PrefabInstance:
       value: BallRed
       objectReference: {fileID: 0}
     - target: {fileID: 6895725260930941839, guid: 639f6c277aac47c4b9d25dcf08539edf, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 7953811026854691559, guid: 4f4a93aec386690478cd867df2d7c25b, type: 3}
+    - target: {fileID: 6895725260930941839, guid: 639f6c277aac47c4b9d25dcf08539edf, type: 3}
       propertyPath: m_Color.b
-      value: 0
+      value: 0.6509434
       objectReference: {fileID: 0}
     - target: {fileID: 6895725260930941839, guid: 639f6c277aac47c4b9d25dcf08539edf, type: 3}
       propertyPath: m_Color.g
-      value: 0
+      value: 0.6509434
       objectReference: {fileID: 0}
     - target: {fileID: 6895725260930941839, guid: 639f6c277aac47c4b9d25dcf08539edf, type: 3}
       propertyPath: m_Color.r
-      value: 0.6132076
+      value: 0.8679245
+      objectReference: {fileID: 0}
+    - target: {fileID: 6895725260930941839, guid: 639f6c277aac47c4b9d25dcf08539edf, type: 3}
+      propertyPath: m_DrawMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7046147634332370200, guid: 639f6c277aac47c4b9d25dcf08539edf, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.509
       objectReference: {fileID: 0}
     - target: {fileID: 7046147634332370200, guid: 639f6c277aac47c4b9d25dcf08539edf, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.272
       objectReference: {fileID: 0}
     - target: {fileID: 7046147634332370200, guid: 639f6c277aac47c4b9d25dcf08539edf, type: 3}
       propertyPath: m_LocalPosition.z
@@ -46,15 +54,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7046147634332370200, guid: 639f6c277aac47c4b9d25dcf08539edf, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7046147634332370200, guid: 639f6c277aac47c4b9d25dcf08539edf, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7046147634332370200, guid: 639f6c277aac47c4b9d25dcf08539edf, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7046147634332370200, guid: 639f6c277aac47c4b9d25dcf08539edf, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

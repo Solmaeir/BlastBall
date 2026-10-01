@@ -21,12 +21,12 @@ public class BallMatching : MonoBehaviour
                 ScoreManager.Instance.AddPop(connectedGroup.Count);
             }
 
-            // 2. Sahnedeki topları sil
+            // 2. Topları havuza geri gönder
             foreach (BallMatching ball in connectedGroup)
             {
                 if (ball != null)
                 {
-                    Destroy(ball.gameObject);
+                    PoolManager.Despawn(ball.gameObject);
                 }
             }
         }

@@ -1,18 +1,12 @@
 using UnityEngine;
 
+[ExecuteAlways]
 [RequireComponent(typeof(RectTransform))]
 public class SafeArea : MonoBehaviour
 {
     private RectTransform rectTransform;
     private Rect lastSafeArea;
     private Vector2Int lastScreenSize;
-    private ScreenOrientation lastOrientation;
-
-    private void Awake()
-    {
-        rectTransform = GetComponent<RectTransform>();
-        Apply();
-    }
 
     private void OnEnable()
     {
@@ -23,8 +17,7 @@ public class SafeArea : MonoBehaviour
     {
         if (Screen.safeArea != lastSafeArea
             || Screen.width != lastScreenSize.x
-            || Screen.height != lastScreenSize.y
-            || Screen.orientation != lastOrientation)
+            || Screen.height != lastScreenSize.y)
         {
             Apply();
         }
@@ -32,15 +25,19 @@ public class SafeArea : MonoBehaviour
 
     private void Apply()
     {
-        if (rectTransform == null || Screen.width <= 0 || Screen.height <= 0)
+        if (Screen.width <= 0 || Screen.height <= 0)
         {
             return;
+        }
+
+        if (rectTransform == null)
+        {
+            rectTransform = GetComponent<RectTransform>();
         }
 
         Rect safeArea = Screen.safeArea;
         lastSafeArea = safeArea;
         lastScreenSize = new Vector2Int(Screen.width, Screen.height);
-        lastOrientation = Screen.orientation;
 
         Vector2 anchorMin = safeArea.position;
         Vector2 anchorMax = safeArea.position + safeArea.size;

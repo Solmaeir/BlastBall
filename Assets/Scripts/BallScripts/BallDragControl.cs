@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class BallDragControl : MonoBehaviour
+public class BallDragControl : MonoBehaviour, IPoolable
 {
     [Header("Sürükleme Ayarları")]
     public float dragSpeed = 20f;
@@ -29,6 +29,22 @@ public class BallDragControl : MonoBehaviour
             position = pos;
             time = t;
         }
+    }
+
+    public void OnSpawnedFromPool()
+    {
+        ResetDragState();
+    }
+
+    public void OnReturnedToPool()
+    {
+        ResetDragState();
+    }
+
+    private void ResetDragState()
+    {
+        isDragging = false;
+        positionHistory.Clear();
     }
 
     void Start()

@@ -46,7 +46,7 @@ public class BallSpawner : MonoBehaviour
 
         // 2. Seçilen topu spawnPoint konumunda oluştur
         Vector3 spawnPos = spawnPoint != null ? spawnPoint.position : transform.position;
-        GameObject newBall = Instantiate(selectedPrefab, spawnPos, Quaternion.identity);
+        GameObject newBall = PoolManager.Spawn(selectedPrefab, spawnPos, Quaternion.identity);
 
         // 3. Topun Rigidbody2D bileşenine ulaş ve dikey itme kuvveti uygula
         Rigidbody2D rb = newBall.GetComponent<Rigidbody2D>();

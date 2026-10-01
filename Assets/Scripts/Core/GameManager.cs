@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum GameState
 {
@@ -12,6 +13,11 @@ public enum GameState
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+
+    [Header("Geçici Game Over Davranışı")]
+    [Tooltip("Game over panelini ekleyince kapat.")]
+    [SerializeField] private bool loadMenuOnGameOver = true;
+    [SerializeField] private string menuSceneName = "Menu";
 
     public GameState State { get; private set; } = GameState.Playing;
     public bool IsPlaying => State == GameState.Playing;
@@ -57,7 +63,14 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        if (State == GameState.GameOver) return;
+
         SetState(GameState.GameOver);
+
+        if (loadMenuOnGameOver)
+        {
+            SceneManager.LoadScene(menuSceneName);
+        }
     }
 
     private void SetState(GameState newState)

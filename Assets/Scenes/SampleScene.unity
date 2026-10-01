@@ -2154,6 +2154,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2200000012}
   - component: {fileID: 2200000013}
+  - component: {fileID: 2200000014}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -2359,6 +2360,21 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: caba0843346c5d047b19324b13a4959e, type: 3}
+--- !u!114 &2200000014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2200000011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c20f1c5059df471e826418e7327fc6fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  topFrame: {fileID: 1079136028}
+  holdSeconds: 2
+  contactLossTolerance: 0.25
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

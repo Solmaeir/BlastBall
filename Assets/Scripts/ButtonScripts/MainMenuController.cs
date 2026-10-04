@@ -8,7 +8,7 @@ public class MainMenuController : MonoBehaviour
 
     public void OnPlayPressed()
     {
-        SceneManager.LoadScene(gameSceneName);
+        SceneLoader.Load(gameSceneName);
     }
 
     public void OnSettingsPressed()

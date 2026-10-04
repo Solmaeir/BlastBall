@@ -69,7 +69,7 @@ public class GameManager : MonoBehaviour
 
         if (loadMenuOnGameOver)
         {
-            SceneManager.LoadScene(menuSceneName);
+            SceneLoader.Load(menuSceneName);
         }
     }
 

@@ -13,6 +13,6 @@ public class GameSceneController : MonoBehaviour
             ScoreManager.Instance.ResetScore();
         }
 
-        SceneManager.LoadScene(menuSceneName);
+        SceneLoader.Load(menuSceneName);
     }
 }

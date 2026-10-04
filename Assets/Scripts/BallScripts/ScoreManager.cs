@@ -9,13 +9,29 @@ public class ScoreManager : MonoBehaviour
     public TextMeshProUGUI scoreText; // Skor yazısı
     public TextMeshProUGUI levelText; // Seviye ve ilerleme yazısı
 
+    [Header("İlerleme Çubuğu (skor plakası)")]
+    [Tooltip("Dolgu objesinin RectTransform'u. anchorMax.x ile dolar (0 = boş, 1 = dolu).")]
+    public RectTransform progressFill;
+    [Min(0.1f)] public float progressFillSpeed = 2.5f;
+
+    [Header("Seviye Eşiği")]
+    [Tooltip("Seviye n'i geçmek için toplam skor: (5 + 6 + ... + (4+n)) x bu değer. 35 = eski 'seviyede 5, 6, 7... patlatma' temposuna yakın.")]
+    [Min(1)] public int averagePointsPerPop = 35;
+
     [Header("Skor & Seviye Değerleri")]
     public int score = 0;
     public int currentLevel = 1;
     public int popsInCurrentLevel = 0;
 
-    // Seviye atlamak için gereken patlatma sayısı (Lvl 1: 5, Lvl 2: 6, Lvl 3: 7...)
-    public int RequiredPops => 4 + currentLevel;
+    // Seviye atlamak için ulaşılması gereken toplam skor (Lvl 1 -> 175, Lvl 2 -> 385, Lvl 3 -> 630...)
+    public int NextLevelScore => ScoreForLevel(currentLevel);
+    private int CurrentLevelStartScore => ScoreForLevel(currentLevel - 1);
+
+    // Seviye 1..level arasını geçmek için gereken toplam skor: (5 + 6 + ... + (4+level)) x averagePointsPerPop
+    private int ScoreForLevel(int level)
+    {
+        return averagePointsPerPop * (4 * level + level * (level + 1) / 2);
+    }
 
     private void Awake()
     {
@@ -30,9 +46,44 @@ public class ScoreManager : MonoBehaviour
         }
     }
 
+    private float targetProgress;
+    private float shownProgress;
+
+    private void OnEnable()
+    {
+        Localization.LanguageChanged += UpdateUI;
+    }
+
+    private void OnDisable()
+    {
+        Localization.LanguageChanged -= UpdateUI;
+    }
+
     private void Start()
     {
         UpdateUI();
+        shownProgress = targetProgress;
+        ApplyProgress();
+    }
+
+    private void Update()
+    {
+        if (progressFill == null || Mathf.Approximately(shownProgress, targetProgress)) return;
+
+        // Dolarken akıcı ilerler (oyun durmuş olsa bile), seviye atlayınca/sıfırlanınca anında boşalır.
+        shownProgress = targetProgress < shownProgress
+            ? targetProgress
+            : Mathf.MoveTowards(shownProgress, targetProgress, progressFillSpeed * Time.unscaledDeltaTime);
+        ApplyProgress();
+    }
+
+    private void ApplyProgress()
+    {
+        if (progressFill == null) return;
+
+        // 0'da dolgu tamamen kaybolsun diye en az bir mikro değer veriyoruz.
+        progressFill.anchorMax = new Vector2(Mathf.Clamp01(shownProgress), progressFill.anchorMax.y);
+        progressFill.gameObject.SetActive(shownProgress > 0.001f);
     }
 
     // Bir grupta patlatma gerçekleştiğinde çalışır
@@ -44,8 +95,8 @@ public class ScoreManager : MonoBehaviour
         // Mevcut seviyedeki patlatma sayısını 1 artır
         popsInCurrentLevel++;
 
-        // Seviye atlama kontrolü
-        if (popsInCurrentLevel >= RequiredPops)
+        // Seviye atlama kontrolü (skor eşiğine göre; büyük bir patlatma birden fazla seviye atlatabilir)
+        while (score >= NextLevelScore)
         {
             LevelUp();
         }
@@ -73,13 +124,17 @@ public class ScoreManager : MonoBehaviour
         // Sadece Seviye Numarasını yazar (Örn: SEVİYE 1)
         if (levelText != null)
         {
-            levelText.text = $"SEVİYE {currentLevel}";
+            levelText.text = $"{Localization.Get("level")} {currentLevel}";
         }
 
-        // Puanı yazar (Örn: SKOR: 0)
+        // Skoru ve bir sonraki seviye için gereken skoru yazar (Örn: SKOR 120 / 175)
         if (scoreText != null)
         {
-            scoreText.text = $"SKOR: {score}";
+            scoreText.text = $"{Localization.Get("score").ToUpperInvariant()} {score} / {NextLevelScore}";
         }
+
+        // Mevcut seviyenin başlangıcından bir sonraki eşiğe kadar ilerleme
+        int levelStart = CurrentLevelStartScore;
+        targetProgress = Mathf.Clamp01((float)(score - levelStart) / (NextLevelScore - levelStart));
     }
 }

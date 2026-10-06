@@ -9,6 +9,13 @@ public class ScoreManager : MonoBehaviour
     public TextMeshProUGUI scoreText; // Skor yazısı
     public TextMeshProUGUI levelText; // Seviye ve ilerleme yazısı
 
+    [Tooltip("Atanırsa 'SEVİYE' kelimesi buraya, levelText'e sadece seviye numarası yazılır.")]
+    public TextMeshProUGUI levelLabelText;
+    [Tooltip("Atanırsa 'SKOR' etiketi buraya yazılır.")]
+    public TextMeshProUGUI scoreLabelText;
+    [Tooltip("Atanırsa 'HEDEF 175' buraya, scoreText'e sadece '85/175' yazılır.")]
+    public TextMeshProUGUI targetText;
+
     [Header("İlerleme Çubuğu (skor plakası)")]
     [Tooltip("Dolgu objesinin RectTransform'u. anchorMax.x ile dolar (0 = boş, 1 = dolu).")]
     public RectTransform progressFill;
@@ -122,15 +129,34 @@ public class ScoreManager : MonoBehaviour
     private void UpdateUI()
     {
         // Sadece Seviye Numarasını yazar (Örn: SEVİYE 1)
+        if (levelLabelText != null)
+        {
+            levelLabelText.text = Localization.Get("level");
+        }
+
         if (levelText != null)
         {
-            levelText.text = $"{Localization.Get("level")} {currentLevel}";
+            levelText.text = levelLabelText != null
+                ? currentLevel.ToString()
+                : $"{Localization.Get("level")} {currentLevel}";
+        }
+
+        if (scoreLabelText != null)
+        {
+            scoreLabelText.text = Localization.Get("score_label");
+        }
+
+        if (targetText != null)
+        {
+            targetText.text = $"{Localization.Get("target")} {NextLevelScore}";
         }
 
         // Skoru ve bir sonraki seviye için gereken skoru yazar (Örn: SKOR 120 / 175)
         if (scoreText != null)
         {
-            scoreText.text = $"{Localization.Get("score").ToUpperInvariant()} {score} / {NextLevelScore}";
+            scoreText.text = targetText != null
+                ? $"{score}/{NextLevelScore}"
+                : $"{Localization.Get("score").ToUpperInvariant()} {score} / {NextLevelScore}";
         }
 
         // Mevcut seviyenin başlangıcından bir sonraki eşiğe kadar ilerleme

@@ -5,6 +5,8 @@ using UnityEngine;
 public class LocalizedText : MonoBehaviour
 {
     [SerializeField] private string key;
+    [Tooltip("İsteğe bağlı. {0} yerine çeviri yazılır, ör. \"{0} 12\" -> \"SEVİYE 12\". Boşsa sadece çeviri.")]
+    [SerializeField] private string format;
 
     private TMP_Text label;
 
@@ -22,6 +24,7 @@ public class LocalizedText : MonoBehaviour
 
     private void Refresh()
     {
-        label.text = Localization.Get(key);
+        string text = Localization.Get(key);
+        label.text = string.IsNullOrEmpty(format) ? text : string.Format(format, text);
     }
 }

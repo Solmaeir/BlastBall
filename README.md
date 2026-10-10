@@ -1,8 +1,7 @@
 # BlastBall
 
 Dikey ekranlı, mobil odaklı bir 2D bulmaca-arcade oyunu. Üst köşelerdeki iki spawner renkli gezegen toplarını bir kutunun içine düşürür; oyuncu topları sürükleyerek aynı renkten gruplar oluşturur ve patlatır. Kutu dolup toplar tavana dayandığında oyun biter.
-<img width="945" height="2048" alt="image" src="https://github.com/user-attachments/assets/4834a89b-d80b-4b83-bbbd-d691822d6c9c" />
-<img width="945" height="2048" alt="image" src="https://github.com/user-attachments/assets/7670b24a-44b7-4e2e-9d36-39d8c6d15945" />
+<img width="460" height="1024" alt="image" src="https://github.com/user-attachments/assets/4834a89b-d80b-4b83-bbbd-d691822d6c9c" /> <img width="460" height="1024" alt="image" src="https://github.com/user-attachments/assets/7670b24a-44b7-4e2e-9d36-39d8c6d15945" />
 
 
 ## Teknik Bilgiler

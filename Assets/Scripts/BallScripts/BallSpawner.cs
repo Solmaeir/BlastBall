@@ -21,10 +21,21 @@ public class BallSpawner : MonoBehaviour
     public float maxUpForce = 9f;      // Yukarı doğru maksimum fırlatma gücü
     public float sideForce = 1.5f;     // Hafif sağa/sola sapma miktarı
 
+    private float nextSpawnTime;
+
     private void Start()
     {
-        // Belirlenen gecikmeyle başlar ve spawnInterval süresince SpawnBalls fonksiyonunu tekrarlar
-        InvokeRepeating(nameof(SpawnBalls), startDelay, spawnInterval);
+        nextSpawnTime = Time.time + startDelay;
+    }
+
+    // Time.time oyun duraklayınca (timeScale 0) durduğu için atışlar da durur.
+    private void Update()
+    {
+        if (Time.time < nextSpawnTime) return;
+
+        SpawnBalls();
+        float factor = DifficultyDirector.Instance != null ? DifficultyDirector.Instance.SpawnIntervalFactor : 1f;
+        nextSpawnTime = Time.time + spawnInterval * factor;
     }
 
     void SpawnBalls()
@@ -56,7 +67,8 @@ public class BallSpawner : MonoBehaviour
             float randomSideForce = Random.Range(-sideForce, sideForce);
 
             // Yukarı ve hafif sağa/sola doğru anlık itme kuvveti (Impulse)
-            Vector2 launchDirection = new Vector2(randomSideForce, randomUpForce);
+            float force = DifficultyDirector.Instance != null ? DifficultyDirector.Instance.LaunchForceFactor : 1f;
+            Vector2 launchDirection = new Vector2(randomSideForce, randomUpForce) * force;
             rb.AddForce(launchDirection, ForceMode2D.Impulse);
         }
     }

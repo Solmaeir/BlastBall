@@ -4,8 +4,20 @@ using UnityEngine;
 public class BallMatching : MonoBehaviour
 {
     [Header("Eşleşme Algılama Ayarları")]
-    [Tooltip("Topun komşularını algılayacağı yarıçap. Top yarıçapından çok hafif geniş tutun.")]
-    public float detectionRadius = 0.55f;
+    [Tooltip("Komşu algılama yarıçapı, topun kendi yarıçapının katı olarak. Top büyüyüp küçülse de doğru çalışır.")]
+    [Min(1f)] public float detectionRadiusMultiplier = 2f;
+
+    private CircleCollider2D circle;
+
+    private float DetectionRadius
+    {
+        get
+        {
+            if (circle == null) circle = GetComponent<CircleCollider2D>();
+            Vector3 scale = transform.lossyScale;
+            return circle.radius * Mathf.Max(Mathf.Abs(scale.x), Mathf.Abs(scale.y)) * detectionRadiusMultiplier;
+        }
+    }
 
     // Kullanıcı etkileşimiyle (BallDragControl üzerinden) çağrılan ana metod
     public void CheckMatches()
@@ -69,7 +81,7 @@ public class BallMatching : MonoBehaviour
         List<BallMatching> neighbors = new List<BallMatching>();
 
         // Topun etrafındaki belirlenen yarıçaptaki tüm kolaydırları tara
-        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, detectionRadius);
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, DetectionRadius);
 
         foreach (Collider2D col in hitColliders)
         {
@@ -91,6 +103,6 @@ public class BallMatching : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, detectionRadius);
+        Gizmos.DrawWireSphere(transform.position, DetectionRadius);
     }
 }

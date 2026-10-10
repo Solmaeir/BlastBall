@@ -22,6 +22,9 @@ public class GameManager : MonoBehaviour
     public GameState State { get; private set; } = GameState.Playing;
     public bool IsPlaying => State == GameState.Playing;
 
+    // Oynanan süre (saniye). Duraklatma ve oyun sonu sayılmaz.
+    public float PlayTime { get; private set; }
+
     public event Action<GameState> StateChanged;
 
     private void Awake()
@@ -33,6 +36,11 @@ public class GameManager : MonoBehaviour
         }
 
         Instance = this;
+    }
+
+    private void Update()
+    {
+        if (IsPlaying) PlayTime += Time.deltaTime;
     }
 
     private void Start()

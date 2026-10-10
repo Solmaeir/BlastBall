@@ -1,22 +1,15 @@
 fileFormatVersion: 2
-guid: 4294fb30134bec243928bd7699231849
-AssetOrigin:
-  serializedVersion: 1
-  productId: 298577
-  packageName: Space Game GUI kit
-  packageVersion: 2.0
-  assetPath: Assets/Space_Exploration_GUI_Kit/Icons/earth-512.png
-  uploadId: 991880
+guid: 246c95c9e4eaf1f4586e574b4620284d
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -67770809101676607
-    second: earth-512_0
+      213: -3797228855560559978
+    second: icon_clock_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -53,12 +46,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 200
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -82,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 2
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -120,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: earth-512_0
+      name: icon_clock_0
       rect:
         serializedVersion: 2
-        x: 50
-        y: 50
-        width: 412
-        height: 412
+        x: 7
+        y: 0
+        width: 90
+        height: 102
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -135,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1cf8a55eeca3f0ff0800000000000000
-      internalID: -67770809101676607
+      spriteID: 692237579788d4bc0800000000000000
+      internalID: -3797228855560559978
       vertices: []
       indices: 
       edges: []
@@ -145,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -155,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      earth-512_0: -67770809101676607
+      icon_clock_0: -3797228855560559978
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

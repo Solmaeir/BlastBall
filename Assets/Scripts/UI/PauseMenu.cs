@@ -31,7 +31,7 @@ public class PauseMenu : MonoBehaviour
     private void Update()
     {
         // Escape / Android geri tuşu: açıksa kapatır.
-        if (IsOpen && Input.GetKeyDown(KeyCode.Escape)) OnClosePressed();
+        if (IsOpen && BackButton.WasPressed()) OnClosePressed();
     }
 
     private void OnDisable()

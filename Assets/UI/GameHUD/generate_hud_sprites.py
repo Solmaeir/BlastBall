@@ -520,3 +520,35 @@ frame_ring("playfield_ring")
 frame_field("playfield_field")
 
 print("done")
+
+
+# ---------------------------------------------------------------- clock icon (game timer)
+def clock_icon(name, size=52):
+    W = size * K
+    c = W / 2
+    img = Image.new("RGBA", (W, W), (0, 0, 0, 0))
+    ow = 4.5 * K
+    r = 16 * K
+    # top knob
+    knob = Image.new("L", (W, W), 0)
+    ImageDraw.Draw(knob).rounded_rectangle((c - 4 * K - ow, 3 * K, c + 4 * K + ow, 8 * K + ow), radius=2 * K, fill=255)
+    fill_mask(img, knob, OUTLINE)
+    knob2 = Image.new("L", (W, W), 0)
+    ImageDraw.Draw(knob2).rounded_rectangle((c - 4 * K, 5 * K, c + 4 * K, 8 * K), radius=1.5 * K, fill=255)
+    fill_mask(img, knob2, hexc('#ffd23f'))
+    cy = c + 3.5 * K
+    m = Image.new("L", (W, W), 0)
+    ImageDraw.Draw(m).ellipse((c - r - ow, cy - r - ow, c + r + ow, cy + r + ow), fill=255)
+    fill_mask(img, m, OUTLINE)
+    m = Image.new("L", (W, W), 0)
+    ImageDraw.Draw(m).ellipse((c - r, cy - r, c + r, cy + r), fill=255)
+    fill_mask(img, m, vgrad(W, W, [(0, WHITE), (1, hexc('#dcd6f5'))], int(cy - r), int(cy + r)))
+    d = ImageDraw.Draw(img)
+    hand = 3.2 * K
+    d.line([(c, cy), (c, cy - 10 * K)], fill=OUTLINE, width=int(hand))
+    d.line([(c, cy), (c + 7 * K, cy + 3 * K)], fill=OUTLINE, width=int(hand))
+    d.ellipse((c - 2.6 * K, cy - 2.6 * K, c + 2.6 * K, cy + 2.6 * K), fill=hexc('#f2445f'))
+    return finish(img, name, size, size)
+
+
+clock_icon("icon_clock")

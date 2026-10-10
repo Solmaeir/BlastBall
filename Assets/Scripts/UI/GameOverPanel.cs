@@ -9,8 +9,6 @@ using UnityEngine.UI;
 // Bu obje aktif kalmalı; açılıp kapanan kısım child'daki UIPanel'dir.
 public class GameOverPanel : MonoBehaviour
 {
-    private const string BestScoreKey = "BestScore";
-
     [Header("Referanslar")]
     [SerializeField] private UIPanel panel;
     [SerializeField] private TMP_Text bestScoreText;
@@ -53,14 +51,9 @@ public class GameOverPanel : MonoBehaviour
     private void Show()
     {
         int score = ScoreManager.Instance != null ? ScoreManager.Instance.score : 0;
-        int bestScore = PlayerPrefs.GetInt(BestScoreKey, 0);
-
-        if (score > bestScore)
-        {
-            bestScore = score;
-            PlayerPrefs.SetInt(BestScoreKey, bestScore);
-            PlayerPrefs.Save();
-        }
+        int level = ScoreManager.Instance != null ? ScoreManager.Instance.currentLevel : 1;
+        PlayerProgress.Submit(score, level);
+        int bestScore = PlayerProgress.BestScore;
 
         if (bestScoreText != null) bestScoreText.text = $"{Localization.Get("best_score")}: {bestScore}";
 

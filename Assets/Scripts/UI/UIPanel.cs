@@ -83,7 +83,7 @@ public class UIPanel : MonoBehaviour
         if (!closeOnBackKey || !IsOpen) return;
         if (OpenPanels.Count == 0 || OpenPanels[OpenPanels.Count - 1] != this) return;
 
-        if (Input.GetKeyDown(KeyCode.Escape)) Dismiss();
+        if (BackButton.WasPressed()) Dismiss();
     }
 
     private void OnDisable()

@@ -36,6 +36,8 @@ public static class Localization
         { "play",         new[] { "OYNA",         "PLAY" } },
         { "lives_full",   new[] { "DOLU",         "FULL" } },
         { "last_level",   new[] { "SON\nSEVİYE",  "LAST\nLEVEL" } },
+        { "record_level", new[] { "EN YÜKSEK SEVİYE", "BEST LEVEL" } },
+        { "record_score", new[] { "EN YÜKSEK SKOR",   "BEST SCORE" } },
         { "reward",       new[] { "ÖDÜL",         "REWARD" } },
         { "wheel",        new[] { "ÇARK",         "WHEEL" } },
         { "shop",         new[] { "MAĞAZA",       "SHOP" } },

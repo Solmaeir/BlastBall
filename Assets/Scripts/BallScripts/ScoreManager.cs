@@ -32,6 +32,16 @@ public class ScoreManager : MonoBehaviour
 
     // Seviye atlamak için ulaşılması gereken toplam skor (Lvl 1 -> 175, Lvl 2 -> 385, Lvl 3 -> 630...)
     public int NextLevelScore => ScoreForLevel(currentLevel);
+
+    // Kesintisiz seviye ilerlemesi: 0 = 1. seviye başı, 1.5 = 2. seviyenin yarısı.
+    public float LevelProgress
+    {
+        get
+        {
+            int start = CurrentLevelStartScore;
+            return currentLevel - 1 + Mathf.Clamp01((float)(score - start) / Mathf.Max(1, NextLevelScore - start));
+        }
+    }
     private int CurrentLevelStartScore => ScoreForLevel(currentLevel - 1);
 
     // Seviye 1..level arasını geçmek için gereken toplam skor: (5 + 6 + ... + (4+level)) x averagePointsPerPop
@@ -107,6 +117,8 @@ public class ScoreManager : MonoBehaviour
         {
             LevelUp();
         }
+
+        PlayerProgress.Submit(score, currentLevel);
 
         UpdateUI();
     }

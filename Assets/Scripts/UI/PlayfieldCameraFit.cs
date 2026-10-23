@@ -19,6 +19,17 @@ public class PlayfieldCameraFit : MonoBehaviour
 
     private Camera cam;
     private readonly Vector3[] corners = new Vector3[4];
+    private float shakeStrength;
+    private float shakeDuration;
+    private float shakeTime;
+
+    // Kısa ekran sarsıntısı (bomba patlaması gibi). Zaman ölçeğinden bağımsızdır.
+    public void Shake(float strength, float duration)
+    {
+        shakeStrength = strength;
+        shakeDuration = Mathf.Max(0.01f, duration);
+        shakeTime = shakeDuration;
+    }
 
     private void LateUpdate()
     {
@@ -50,6 +61,12 @@ public class PlayfieldCameraFit : MonoBehaviour
         position.y = bounds.center.y - (centerFraction - 0.5f) * 2f * size;
 
         if (!Mathf.Approximately(cam.orthographicSize, size)) cam.orthographicSize = size;
+        if (shakeTime > 0f)
+        {
+            shakeTime -= Time.unscaledDeltaTime;
+            position += (Vector3)(Random.insideUnitCircle * (shakeStrength * Mathf.Clamp01(shakeTime / shakeDuration)));
+        }
+
         if ((transform.position - position).sqrMagnitude > 1e-8f) transform.position = position;
     }
 

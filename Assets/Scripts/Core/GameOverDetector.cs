@@ -3,6 +3,7 @@ using UnityEngine;
 
 // Üst frame'e bir top kesintisiz biçimde holdSeconds boyunca temas ederse oyunu bitirir.
 // Zıplama ve spawn anındaki anlık çarpmalar süre dolmadan temas kesildiği için sayılmaz.
+// Süreler birikim olarak tutulur: dondurma gibi duraklatmalarda hiçbir şey ilerlemez, kalkan varsa oyun bitmez.
 public class GameOverDetector : MonoBehaviour
 {
     [Tooltip("Havuzun üst sınırını oluşturan frame'in collider'ı.")]
@@ -16,49 +17,59 @@ public class GameOverDetector : MonoBehaviour
 
     private struct ContactTime
     {
-        public float start;
-        public float lastSeen;
+        public float held;
+        public float missing;
     }
 
     private readonly Collider2D[] contacts = new Collider2D[32];
     private readonly Dictionary<Collider2D, ContactTime> touching = new Dictionary<Collider2D, ContactTime>();
-    private readonly List<Collider2D> expired = new List<Collider2D>();
+    private readonly HashSet<Collider2D> present = new HashSet<Collider2D>();
+    private readonly List<Collider2D> keys = new List<Collider2D>();
 
     private void FixedUpdate()
     {
         GameManager gameManager = GameManager.Instance;
         if (gameManager == null || !gameManager.IsPlaying || topFrame == null) return;
 
-        float now = Time.time;
+        PowerUpManager powerUps = PowerUpManager.Instance;
+        if (powerUps != null && powerUps.GameOverPaused) return;
+
+        float dt = Time.fixedDeltaTime;
         int count = topFrame.GetContacts(contacts);
+        present.Clear();
 
         for (int i = 0; i < count; i++)
         {
             Collider2D other = contacts[i];
-            if (other == null || !other.TryGetComponent(out BallMatching _)) continue;
+            if (other == null || !other.TryGetComponent(out BallMatching ball) || !ball.CountsForGameOver) continue;
 
-            float start = touching.TryGetValue(other, out ContactTime previous) ? previous.start : now;
-            touching[other] = new ContactTime { start = start, lastSeen = now };
+            present.Add(other);
+            touching.TryGetValue(other, out ContactTime contact);
+            contact.held += dt;
+            contact.missing = 0f;
+            touching[other] = contact;
 
-            if (now - start >= holdSeconds)
-            {
-                gameManager.GameOver();
-                return;
-            }
+            if (contact.held < holdSeconds) continue;
+
+            touching.Clear();
+            if (powerUps != null && powerUps.TryAbsorbGameOver()) return;
+
+            gameManager.GameOver();
+            return;
         }
 
-        expired.Clear();
-        foreach (KeyValuePair<Collider2D, ContactTime> pair in touching)
-        {
-            if (pair.Key == null || now - pair.Value.lastSeen > contactLossTolerance)
-            {
-                expired.Add(pair.Key);
-            }
-        }
+        keys.Clear();
+        foreach (Collider2D key in touching.Keys) keys.Add(key);
 
-        foreach (Collider2D collider in expired)
+        foreach (Collider2D key in keys)
         {
-            touching.Remove(collider);
+            if (key != null && present.Contains(key)) continue;
+
+            ContactTime contact = touching[key];
+            contact.missing += dt;
+
+            if (key == null || contact.missing > contactLossTolerance) touching.Remove(key);
+            else touching[key] = contact;
         }
     }
 }

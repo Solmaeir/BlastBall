@@ -9,13 +9,13 @@ public class DifficultyDirector : MonoBehaviour
 
     [Header("Zorluk Eğrisi")]
     [Tooltip("Yalnızca süreyle zorluğun yarıya ulaşması için gereken süre (saniye).")]
-    [SerializeField, Min(1f)] private float timeHalfLife = 240f;
+    [SerializeField, Min(1f)] private float timeHalfLife = 100f;
     [Tooltip("Yalnızca seviyeyle zorluğun yarıya ulaşması için gereken seviye sayısı.")]
-    [SerializeField, Min(0.1f)] private float levelHalfLife = 6f;
+    [SerializeField, Min(0.1f)] private float levelHalfLife = 4f;
 
     [Header("Etkiler (zorluk 0 -> 1)")]
     [Tooltip("En zor durumda atış aralığı başlangıcın bu katına iner.")]
-    [SerializeField, Range(0.1f, 1f)] private float minSpawnIntervalFactor = 0.4f;
+    [SerializeField, Range(0.1f, 1f)] private float minSpawnIntervalFactor = 0.5f;
     [Tooltip("En zor durumda fırlatma gücü başlangıcın bu katına çıkar.")]
     [SerializeField, Min(1f)] private float maxLaunchForceFactor = 1.3f;
 

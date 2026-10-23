@@ -10,7 +10,7 @@ using UnityEngine.UI;
 public static class UIPanelPrefabBuilder
 {
     private const string PrefabPath = "Assets/Prefabs/UIPanel.prefab";
-    private const string SpriteFolder = "Assets/UI/Settings/";
+    private const string SpriteFolder = "Assets/UI/Shared/Panel/";
 
     [MenuItem("Tools/BlastBall/Create UIPanel Prefab")]
     private static void Create()

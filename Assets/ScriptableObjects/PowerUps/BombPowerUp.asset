@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ff7706f3a5c19123b8780b523f751fc, type: 3}
+  m_Name: BombPowerUp
+  m_EditorClassIdentifier: 
+  id: bomb
+  labelKey: booster_bomb
+  unlockLevel: 3
+  startingCount: 1
+  faceSprite: {fileID: 21300000, guid: e43713f79e6a0a3bbad76782953b4855, type: 3}
+  baseSprite: {fileID: 21300000, guid: 08608afeeda7252c9b4e23f60aa491ed, type: 3}
+  icon: {fileID: 21300000, guid: c8a3612ead1c5dc44880b5f3e60387fa, type: 3}
+  iconDisabled: {fileID: 21300000, guid: 75db9ecf10860de17bc5829fc78fdb79, type: 3}
+  glowColor: {r: 1, g: 0.5882353, b: 0.3529412, a: 1}
+  activeStyle: 1
+  activateSound: {fileID: 8300000, guid: d1be7de3e660e35948688f3bc338d8fa, type: 3}
+  radiusInBalls: 2
+  blastPrefab: {fileID: 214014048468588941, guid: 3feeb255703937633b099c394df99929, type: 3}
+  reticlePrefab: {fileID: 2197387113555588924, guid: 47aa8e6dc5b309099ab23f900f206e13, type: 3}
+  blastSound: {fileID: 8300000, guid: 56c2586a2deff7f4a94797950d609fb6, type: 3}
+  shakeStrength: 0.12
+  shakeDuration: 0.25

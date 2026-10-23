@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca8abaf4cd21b4030b3e62117c2b377c, type: 3}
+  m_Name: BlackHole
+  m_EditorClassIdentifier: 
+  id: blackhole
+  nameKey: blackhole_name
+  descriptionKey: blackhole_desc
+  icon: {fileID: 21300000, guid: 6b479fe277563cd45a73313c309f01ab, type: 3}
+  prefab: {fileID: 8572589426430402260, guid: fcb49bb08a5a1f6c18e27d57f49f0ada, type: 3}
+  unlockLevel: 30
+  spawnChance: 0.035
+  maxAlive: 1
+  minInterval: 45
+  counter: {fileID: 11400000, guid: b76bc97cf6e56f1b29fa0462b239fb7c, type: 2}
+  counterGrantOnUnlock: 1
+  neutralizeEffect: {fileID: 4687072910736052199, guid: 3feeb255703937633b099c394df99929, type: 3}

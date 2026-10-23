@@ -6,7 +6,9 @@ public enum BoosterVisualState
 {
     Ready,
     Active,
-    Empty
+    Empty,
+    // Seviye henüz açılmadı
+    Locked
 }
 
 public enum BoosterActiveStyle
@@ -44,6 +46,7 @@ public class BoosterButtonView : MonoBehaviour
     [SerializeField] private TMP_Text countText;
     [SerializeField] private GameObject plusBadge;
     [SerializeField] private GameObject checkBadge;
+    [SerializeField] private GameObject lockBadge;
 
     [Header("Aktif Durum")]
     [SerializeField] private Image glow;
@@ -52,13 +55,55 @@ public class BoosterButtonView : MonoBehaviour
     [SerializeField] private Image ringTrack;
     [SerializeField] private UIButtonPressEffect pressEffect;
 
+    [Header("Tanımdan Görünüm")]
+    [Tooltip("İkon sprite'ının piksel boyutu bu katsayıyla canvas birimine çevrilir.")]
+    [SerializeField, Min(0.01f)] private float iconScale = 0.449f;
+
     public BoosterVisualState State => state;
     public int Count => count;
+
+    // Görünümü (renk, ikon, parlama rengi, aktif stili, etiket) güçlendirici tanımından alır.
+    public void Bind(PowerUpDefinition definition)
+    {
+        faceSprite = definition.faceSprite;
+        baseSprite = definition.baseSprite;
+        iconSprite = definition.icon;
+        iconEmptySprite = definition.iconDisabled;
+        glowColor = definition.glowColor;
+        activeStyle = definition.activeStyle;
+
+        if (icon != null && definition.icon != null) icon.rectTransform.sizeDelta = definition.icon.rect.size * iconScale;
+
+        LocalizedText label = GetComponentInChildren<LocalizedText>(true);
+        if (label != null) label.SetKey(definition.labelKey);
+
+        Apply();
+    }
 
     public void SetState(BoosterVisualState newState)
     {
         state = newState;
         Apply();
+    }
+
+    // Kilit açılınca butonu kısa süre büyütüp eski haline getirir.
+    public void PlayUnlock()
+    {
+        StopAllCoroutines();
+        StartCoroutine(UnlockPop());
+    }
+
+    private System.Collections.IEnumerator UnlockPop()
+    {
+        const float duration = 0.4f;
+        Vector3 rest = Vector3.one;
+        for (float t = 0f; t < duration; t += Time.unscaledDeltaTime)
+        {
+            float k = t / duration;
+            transform.localScale = rest * (1f + 0.22f * Mathf.Sin(k * Mathf.PI));
+            yield return null;
+        }
+        transform.localScale = rest;
     }
 
     public void SetCount(int newCount)
@@ -90,7 +135,8 @@ public class BoosterButtonView : MonoBehaviour
 
     private void Apply()
     {
-        bool empty = state == BoosterVisualState.Empty;
+        bool locked = state == BoosterVisualState.Locked;
+        bool empty = state == BoosterVisualState.Empty || locked;
         bool active = state == BoosterVisualState.Active;
 
         if (face != null) face.sprite = empty ? faceEmptySprite : faceSprite;
@@ -99,7 +145,8 @@ public class BoosterButtonView : MonoBehaviour
 
         if (countText != null) countText.text = count.ToString();
         SetActive(countBadge, state == BoosterVisualState.Ready && count > 0);
-        SetActive(plusBadge, empty);
+        SetActive(plusBadge, state == BoosterVisualState.Empty);
+        SetActive(lockBadge, locked);
         SetActive(checkBadge, active && activeStyle == BoosterActiveStyle.Equipped);
 
         if (glow != null) glow.color = glowColor;

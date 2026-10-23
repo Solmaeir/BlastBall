@@ -22,6 +22,12 @@ public class LocalizedText : MonoBehaviour
         Localization.LanguageChanged -= Refresh;
     }
 
+    public void SetKey(string newKey)
+    {
+        key = newKey;
+        if (isActiveAndEnabled) Refresh();
+    }
+
     private void Refresh()
     {
         string text = Localization.Get(key);

@@ -51,7 +51,7 @@ MonoBehaviour:
   - {fileID: 7927968207486235826, guid: d7bba05dab7daf44882dc675dd477341, type: 3}
   spawnPoint: {fileID: 5050426605413112836}
   startDelay: 3
-  spawnInterval: 1.5
+  spawnInterval: 1.2
   ballsPerSpawn: 1
   minUpForce: 0.1
   maxUpForce: 0.1

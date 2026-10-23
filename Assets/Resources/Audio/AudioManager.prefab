@@ -1,0 +1,195 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8944074405446688029
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3137184960026953136}
+  - component: {fileID: 64972511655987667}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3137184960026953136
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8944074405446688029}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &64972511655987667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8944074405446688029}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 990fbeef6b152daeabdffee2ee3468fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicVolume: 1
+  sfxVolume: 1
+  music:
+  - id: 1
+    clip: {fileID: 0}
+    volume: 0.6
+    loop: 1
+    fadeSeconds: 1
+  - id: 2
+    clip: {fileID: 8300000, guid: b187819781ee5901eb3a5f7b28dd2b3e, type: 3}
+    volume: 0.6
+    loop: 1
+    fadeSeconds: 5
+  - id: 3
+    clip: {fileID: 0}
+    volume: 0.6
+    loop: 1
+    fadeSeconds: 1.5
+  - id: 4
+    clip: {fileID: 0}
+    volume: 0.6
+    loop: 0
+    fadeSeconds: 0.5
+  sceneMusic:
+  - sceneName: Splash
+    music: 1
+  - sceneName: Menu
+    music: 2
+  - sceneName: SampleScene
+    music: 3
+  sfx:
+  - id: 1
+    clips:
+    - {fileID: 8300000, guid: c2f0806f8729c3ab8a49060385cf505e, type: 3}
+    volume: 0.8
+    pitchVariation: 0.03
+    minInterval: 0.04
+    maxVoices: 0
+    sharedLimitWith: 0
+  - id: 2
+    clips:
+    - {fileID: 8300000, guid: 42483ef6698e5c64f864e57d86108207, type: 3}
+    volume: 0.9
+    pitchVariation: 0
+    minInterval: 0.1
+    maxVoices: 0
+    sharedLimitWith: 0
+  - id: 3
+    clips:
+    - {fileID: 8300000, guid: f0ec897b455e1722caf435b20171a168, type: 3}
+    volume: 0.75
+    pitchVariation: 0.02
+    minInterval: 0.05
+    maxVoices: 0
+    sharedLimitWith: 0
+  - id: 4
+    clips:
+    - {fileID: 8300000, guid: bbef2c359e9033d03bd16c93fe1cbe3f, type: 3}
+    volume: 0.75
+    pitchVariation: 0.02
+    minInterval: 0.05
+    maxVoices: 0
+    sharedLimitWith: 0
+  - id: 5
+    clips:
+    - {fileID: 8300000, guid: 50d536d6f8f427e658fec024717a0715, type: 3}
+    volume: 0.8
+    pitchVariation: 0
+    minInterval: 0
+    maxVoices: 0
+    sharedLimitWith: 0
+  - id: 6
+    clips:
+    - {fileID: 8300000, guid: 0ab3069cb255bb9dbb72d654c3fc615a, type: 3}
+    volume: 0.9
+    pitchVariation: 0
+    minInterval: 0
+    maxVoices: 0
+    sharedLimitWith: 0
+  - id: 7
+    clips:
+    - {fileID: 8300000, guid: 9435c86202e6e7adda4cd2ff00c81bb2, type: 3}
+    volume: 0.85
+    pitchVariation: 0
+    minInterval: 0
+    maxVoices: 0
+    sharedLimitWith: 0
+  - id: 8
+    clips:
+    - {fileID: 8300000, guid: 91dfd5030a674a34b98b87880d7b9b30, type: 3}
+    - {fileID: 8300000, guid: b8733dcd7cb42acb8a48751f5eaae9f3, type: 3}
+    - {fileID: 8300000, guid: 2fda4ba701d26e4d0a58dd99c3dded35, type: 3}
+    - {fileID: 8300000, guid: 8813adc8ea301b96dbd723c1af470a9b, type: 3}
+    volume: 0.75
+    pitchVariation: 0.06
+    minInterval: 0.025
+    maxVoices: 3
+    sharedLimitWith: 9
+  - id: 9
+    clips:
+    - {fileID: 8300000, guid: 5fe4f9ea2c5998cb88eb73982c6092a1, type: 3}
+    - {fileID: 8300000, guid: 49b059e4100a24ebfba85ba8d3298f8d, type: 3}
+    volume: 0.5
+    pitchVariation: 0.05
+    minInterval: 0.05
+    maxVoices: 3
+    sharedLimitWith: 8
+  - id: 10
+    clips:
+    - {fileID: 8300000, guid: c78ad3025bfa7fece912f123094deedf, type: 3}
+    volume: 0.4
+    pitchVariation: 0.05
+    minInterval: 0.05
+    maxVoices: 0
+    sharedLimitWith: 0
+  - id: 11
+    clips:
+    - {fileID: 8300000, guid: 9e9093e8e2ab5dfbca7d033b8446fa8e, type: 3}
+    volume: 0.5
+    pitchVariation: 0.05
+    minInterval: 0.08
+    maxVoices: 0
+    sharedLimitWith: 0
+  - id: 12
+    clips:
+    - {fileID: 8300000, guid: 7344ba4ef7786e50babc0ba83297d003, type: 3}
+    volume: 0.85
+    pitchVariation: 0.04
+    minInterval: 0.06
+    maxVoices: 0
+    sharedLimitWith: 0
+  - id: 13
+    clips:
+    - {fileID: 8300000, guid: de969930050b17a6fadea3f41e6892f7, type: 3}
+    volume: 0.7
+    pitchVariation: 0
+    minInterval: 0.1
+    maxVoices: 0
+    sharedLimitWith: 0
+  - id: 14
+    clips:
+    - {fileID: 8300000, guid: 8ee5737be6b8320509748e8c2aec5cbf, type: 3}
+    volume: 0.8
+    pitchVariation: 0
+    minInterval: 0
+    maxVoices: 0
+    sharedLimitWith: 0
+  voiceCount: 16
+  autoButtonSounds: 1

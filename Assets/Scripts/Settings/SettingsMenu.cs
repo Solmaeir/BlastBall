@@ -1,102 +1,128 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Ayarlar paneli (prefab: Assets/UI/SettingsPanel/Prefabs/SettingsPanel.prefab). Menü ve oyun sahnesi aynı prefab'ı kullanır.
+// Sayfalar: ana ayarlar, dil, bilgi. Tercihler GameSettings'e yazılır; sesi ve titreşimi AudioManager / Haptics uygular.
 public class SettingsMenu : MonoBehaviour
 {
-    private const string VolumeKey = "Volume";
-    private const string MutedKey = "Muted";
+    [Header("Sayfalar")]
+    [SerializeField] private GameObject mainPage;
+    [SerializeField] private GameObject languagePage;
+    [SerializeField] private GameObject infoPage;
 
-    [Header("Paneller")]
-    [SerializeField] private GameObject settingsContent;
-    [SerializeField] private GameObject languagePanel;
-    [SerializeField] private GameObject infoPanel;
-
-    [Header("Ayarlar Menüsü")]
-    [SerializeField] private Button infoButton;
+    [Header("Ana Sayfa")]
+    [SerializeField] private Slider musicSlider;
+    [SerializeField] private SwitchToggle soundToggle;
+    [SerializeField] private SwitchToggle hapticsToggle;
+    [SerializeField] private Button howToPlayButton;
     [SerializeField] private Button languageButton;
-    [SerializeField] private Button muteButton;
-    [SerializeField] private Image muteIcon;
-    [SerializeField] private Sprite soundOnSprite;
-    [SerializeField] private Sprite soundOffSprite;
-    [SerializeField] private Slider volumeSlider;
+    [SerializeField] private Button infoButton;
+    [SerializeField] private Button closeButton;
+    [Tooltip("Panelin altındaki 'Ana Menü' butonu. Yalnızca oyun sahnesinde gösterilir.")]
+    [SerializeField] private GameObject mainMenuButtonObject;
+    [SerializeField] private Button mainMenuButton;
 
-    [Header("Dil Menüsü")]
+    [Header("Dil Sayfası")]
     [SerializeField] private Button turkishButton;
     [SerializeField] private Button englishButton;
     [SerializeField] private Button languageBackButton;
 
-    [Header("Bilgi Menüsü")]
+    [Header("Bilgi Sayfası")]
     [SerializeField] private Button infoBackButton;
 
-    private bool muted;
+    [Header("Davranış")]
+    [Tooltip("Açıksa 'Ana Menü' butonu gösterilir (oyun sahnesi için).")]
+    [SerializeField] private bool showMainMenuButton;
+    [SerializeField, Min(1f)] private float fadeSpeed = 9f;
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void ApplySavedAudio()
-    {
-        bool savedMuted = PlayerPrefs.GetInt(MutedKey, 0) == 1;
-        AudioListener.volume = savedMuted ? 0f : PlayerPrefs.GetFloat(VolumeKey, 1f);
-    }
+    private CanvasGroup group;
+    private bool initialized;
+
+    public event Action Closed;
+    public event Action MainMenuPressed;
+    public event Action HowToPlayPressed;
+
+    public bool IsOpen => gameObject.activeSelf;
 
     private void Awake()
     {
-        muted = PlayerPrefs.GetInt(MutedKey, 0) == 1;
-        volumeSlider.SetValueWithoutNotify(PlayerPrefs.GetFloat(VolumeKey, 1f));
+        Initialize();
+    }
 
-        volumeSlider.onValueChanged.AddListener(SetVolume);
-        muteButton.onClick.AddListener(ToggleMute);
-        languageButton.onClick.AddListener(() => Show(languagePanel));
-        infoButton.onClick.AddListener(() => Show(infoPanel));
-        languageBackButton.onClick.AddListener(ShowSettings);
-        infoBackButton.onClick.AddListener(ShowSettings);
+    private void Initialize()
+    {
+        if (initialized) return;
+        initialized = true;
+
+        group = GetComponent<CanvasGroup>();
+        if (group == null) group = gameObject.AddComponent<CanvasGroup>();
+
+        musicSlider.onValueChanged.AddListener(value => GameSettings.MusicVolume = value);
+        soundToggle.ValueChanged += on => GameSettings.SoundEnabled = on;
+        hapticsToggle.ValueChanged += OnHapticsToggled;
+
+        howToPlayButton.onClick.AddListener(() => HowToPlayPressed?.Invoke());
+        languageButton.onClick.AddListener(() => ShowPage(languagePage));
+        infoButton.onClick.AddListener(() => ShowPage(infoPage));
+        languageBackButton.onClick.AddListener(() => ShowPage(mainPage));
+        infoBackButton.onClick.AddListener(() => ShowPage(mainPage));
+        closeButton.onClick.AddListener(Close);
+        mainMenuButton.onClick.AddListener(() => MainMenuPressed?.Invoke());
         turkishButton.onClick.AddListener(() => Localization.Current = Language.Turkish);
         englishButton.onClick.AddListener(() => Localization.Current = Language.English);
     }
 
+    public void Open()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void Close()
+    {
+        gameObject.SetActive(false);
+    }
+
     private void OnEnable()
     {
-        RefreshMuteIcon();
+        Initialize();
+
+        musicSlider.SetValueWithoutNotify(GameSettings.MusicVolume);
+        soundToggle.SetWithoutNotify(GameSettings.SoundEnabled);
+        hapticsToggle.SetWithoutNotify(GameSettings.HapticsEnabled);
+        mainMenuButtonObject.SetActive(showMainMenuButton);
+        ShowPage(mainPage);
+
+        group.alpha = 0f;
     }
 
-    private void Start()
+    private void OnDisable()
     {
-        ShowSettings();
+        GameSettings.Save();
+        Closed?.Invoke();
     }
 
-    private void Show(GameObject panel)
+    private void Update()
     {
-        settingsContent.SetActive(false);
-        languagePanel.SetActive(panel == languagePanel);
-        infoPanel.SetActive(panel == infoPanel);
+        if (group.alpha < 1f) group.alpha = Mathf.MoveTowards(group.alpha, 1f, Time.unscaledDeltaTime * fadeSpeed);
+
+        // Escape / Android geri tuşu: alt sayfadaysa ana sayfaya, ana sayfadaysa paneli kapatır.
+        if (InfoPopup.BlocksBackButton || !BackButton.WasPressed()) return;
+
+        if (mainPage.activeSelf) Close();
+        else ShowPage(mainPage);
     }
 
-    private void ShowSettings()
+    private void ShowPage(GameObject page)
     {
-        settingsContent.SetActive(true);
-        languagePanel.SetActive(false);
-        infoPanel.SetActive(false);
+        mainPage.SetActive(page == mainPage);
+        languagePage.SetActive(page == languagePage);
+        infoPage.SetActive(page == infoPage);
     }
 
-    private void SetVolume(float value)
+    private static void OnHapticsToggled(bool on)
     {
-        PlayerPrefs.SetFloat(VolumeKey, value);
-        ApplyAudio();
-    }
-
-    private void ToggleMute()
-    {
-        muted = !muted;
-        PlayerPrefs.SetInt(MutedKey, muted ? 1 : 0);
-        ApplyAudio();
-        RefreshMuteIcon();
-    }
-
-    private void ApplyAudio()
-    {
-        AudioListener.volume = muted ? 0f : volumeSlider.value;
-    }
-
-    private void RefreshMuteIcon()
-    {
-        muteIcon.sprite = muted ? soundOffSprite : soundOnSprite;
+        GameSettings.HapticsEnabled = on;
+        if (on) Haptics.Play(HapticType.Medium);
     }
 }

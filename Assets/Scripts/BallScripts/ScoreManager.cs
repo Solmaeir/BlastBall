@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
 using TMPro; // TextMeshPro kullanabilmek için ekledik
 
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance { get; private set; }
+
+    public event Action<int> LevelChanged;
 
     [Header("UI Göstergeleri")]
     public TextMeshProUGUI scoreText; // Skor yazısı
@@ -129,13 +132,14 @@ public class ScoreManager : MonoBehaviour
         currentLevel = 1;
         popsInCurrentLevel = 0;
         UpdateUI();
+        LevelChanged?.Invoke(currentLevel);
     }
 
     private void LevelUp()
     {
         popsInCurrentLevel = 0; // Yeni seviye için sayacı sıfırla
         currentLevel++;
-        Debug.Log($"SEVİYE ATLADINIZ! Yeni Seviye: {currentLevel}");
+        LevelChanged?.Invoke(currentLevel);
     }
 
     private void UpdateUI()

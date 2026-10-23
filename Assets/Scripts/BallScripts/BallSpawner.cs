@@ -31,6 +31,13 @@ public class BallSpawner : MonoBehaviour
     // Time.time oyun duraklayınca (timeScale 0) durduğu için atışlar da durur.
     private void Update()
     {
+        // Dondur gibi güçlendiriciler atışı durdurur; süre dolunca program kaldığı yerden devam eder.
+        if (PowerUpManager.Instance != null && PowerUpManager.Instance.SpawningBlocked)
+        {
+            nextSpawnTime += Time.deltaTime;
+            return;
+        }
+
         if (Time.time < nextSpawnTime) return;
 
         SpawnBalls();
@@ -54,6 +61,7 @@ public class BallSpawner : MonoBehaviour
         // 1. Dizi içinden rastgele bir top prefab'i seç
         int randomIndex = Random.Range(0, ballPrefabs.Length);
         GameObject selectedPrefab = ballPrefabs[randomIndex];
+        if (SpecialBallDirector.Instance != null) selectedPrefab = SpecialBallDirector.Instance.Pick(selectedPrefab);
 
         // 2. Seçilen topu spawnPoint konumunda oluştur
         Vector3 spawnPos = spawnPoint != null ? spawnPoint.position : transform.position;

@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 // Topların tek giriş noktası (Input System). Dokunmatik, fare ve kalem Pointer.current üzerinden aynı yoldan okunur.
@@ -11,9 +9,7 @@ public class BallInputController : MonoBehaviour
     [SerializeField, Min(0f)] private float touchRadius = 0.12f;
 
     private readonly Collider2D[] hits = new Collider2D[8];
-    private readonly List<RaycastResult> uiHits = new List<RaycastResult>();
     private ContactFilter2D filter;
-    private PointerEventData uiPointer;
     private Camera cam;
     private BallDragControl activeBall;
 
@@ -51,7 +47,7 @@ public class BallInputController : MonoBehaviour
             return;
         }
 
-        if (pointer.press.wasPressedThisFrame && CanPlay() && !IsOverUI(screen))
+        if (pointer.press.wasPressedThisFrame && CanPlay() && !PointerOverUI.Check(screen))
         {
             Vector2 world = ToWorld(screen);
             activeBall = FindBall(world);
@@ -84,21 +80,10 @@ public class BallInputController : MonoBehaviour
         return best;
     }
 
+    // Oyun duraklatılmışken veya bir güçlendirici (ör. bomba hedeflemesi) girişi kilitlemişken top seçilmez.
     private static bool CanPlay()
     {
-        return GameManager.Instance == null || GameManager.Instance.IsPlaying;
-    }
-
-    // UI üzerine basıldıysa (butonlar, paneller) top seçilmez.
-    private bool IsOverUI(Vector2 screen)
-    {
-        EventSystem eventSystem = EventSystem.current;
-        if (eventSystem == null) return false;
-
-        if (uiPointer == null) uiPointer = new PointerEventData(eventSystem);
-        uiPointer.position = screen;
-        uiHits.Clear();
-        eventSystem.RaycastAll(uiPointer, uiHits);
-        return uiHits.Count > 0;
+        if (GameManager.Instance != null && !GameManager.Instance.IsPlaying) return false;
+        return PowerUpManager.Instance == null || !PowerUpManager.Instance.InputLocked;
     }
 }

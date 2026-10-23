@@ -1,42 +1,35 @@
 using UnityEngine;
 
-// Oyun içi duraklatma: pause butonu ayar panelini açar ve oyunu durdurur, panel kapanınca oyun devam eder.
-// Ayarlar paneli (ses, dil, bilgi) Menu sahnesindekiyle aynı SettingsMenu bileşenini kullanır.
+// Oyun içi duraklatma: pause butonu ayarlar panelini açar ve oyunu durdurur, panel kapanınca oyun devam eder.
 public class PauseMenu : MonoBehaviour
 {
-    [SerializeField] private GameObject panel;
+    [SerializeField] private SettingsMenu settings;
 
     private bool pausedByMenu;
 
-    public bool IsOpen => panel != null && panel.activeSelf;
+    public bool IsOpen => settings != null && settings.IsOpen;
+
+    private void OnEnable()
+    {
+        settings.Closed += Resume;
+    }
+
+    private void OnDisable()
+    {
+        settings.Closed -= Resume;
+        Resume();
+    }
 
     public void OnPausePressed()
     {
-        if (panel == null || IsOpen) return;
+        if (IsOpen) return;
 
         GameManager gameManager = GameManager.Instance;
         if (gameManager == null || !gameManager.IsPlaying) return;
 
         gameManager.PauseGame();
         pausedByMenu = true;
-        panel.SetActive(true);
-    }
-
-    public void OnClosePressed()
-    {
-        if (panel != null) panel.SetActive(false);
-        Resume();
-    }
-
-    private void Update()
-    {
-        // Escape / Android geri tuşu: açıksa kapatır.
-        if (IsOpen && BackButton.WasPressed()) OnClosePressed();
-    }
-
-    private void OnDisable()
-    {
-        Resume();
+        settings.Open();
     }
 
     private void Resume()

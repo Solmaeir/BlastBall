@@ -3,9 +3,21 @@ using UnityEngine;
 
 public class BallMatching : MonoBehaviour
 {
+    // Bir grup top patladığında (patlayan top sayısı ile) tetiklenir. Ses ve titreşim gibi geri bildirimler buna abone olur.
+    public static event System.Action<int> GroupPopped;
+
     [Header("Eşleşme Algılama Ayarları")]
     [Tooltip("Komşu algılama yarıçapı, topun kendi yarıçapının katı olarak. Top büyüyüp küçülse de doğru çalışır.")]
     [Min(1f)] public float detectionRadiusMultiplier = 2f;
+
+    [Header("Kurallar")]
+    [Tooltip("Kapalıysa renk eşleşmesine girmez (düşman toplar, yanmış toplar).")]
+    [SerializeField] private bool matchable = true;
+    [Tooltip("Kapalıysa üst çerçeveye değmesi oyunu bitirmez (ör. serbestçe yüzen Karıştırıcı).")]
+    [SerializeField] private bool countsForGameOver = true;
+
+    public bool Matchable { get => matchable; set => matchable = value; }
+    public bool CountsForGameOver => countsForGameOver;
 
     private CircleCollider2D circle;
 
@@ -22,6 +34,8 @@ public class BallMatching : MonoBehaviour
     // Kullanıcı etkileşimiyle (BallDragControl üzerinden) çağrılan ana metod
     public void CheckMatches()
     {
+        if (!matchable) return;
+
         List<BallMatching> connectedGroup = GetConnectedBalls();
 
         // 6 veya daha fazla top aynı Tag ile birleştiyse
@@ -33,7 +47,10 @@ public class BallMatching : MonoBehaviour
                 ScoreManager.Instance.AddPop(connectedGroup.Count);
             }
 
-            // 2. Topları havuza geri gönder
+            // 2. Geri bildirimler (ses, titreşim) olay üzerinden
+            GroupPopped?.Invoke(connectedGroup.Count);
+
+            // 3. Topları havuza geri gönder
             foreach (BallMatching ball in connectedGroup)
             {
                 if (ball != null)
@@ -89,7 +106,7 @@ public class BallMatching : MonoBehaviour
             if (col.gameObject != gameObject && col.CompareTag(gameObject.tag))
             {
                 BallMatching neighborBall = col.GetComponent<BallMatching>();
-                if (neighborBall != null)
+                if (neighborBall != null && neighborBall.matchable)
                 {
                     neighbors.Add(neighborBall);
                 }

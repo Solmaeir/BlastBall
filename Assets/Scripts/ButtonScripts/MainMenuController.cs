@@ -1,9 +1,8 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
-    [SerializeField] private GameObject settingsPanel;
+    [SerializeField] private SettingsMenu settings;
     [SerializeField] private string gameSceneName = "SampleScene";
 
     public void OnPlayPressed()
@@ -13,11 +12,6 @@ public class MainMenuController : MonoBehaviour
 
     public void OnSettingsPressed()
     {
-        settingsPanel.SetActive(true);
-    }
-
-    public void OnCloseSettingsPressed()
-    {
-        settingsPanel.SetActive(false);
+        settings.Open();
     }
 }

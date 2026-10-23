@@ -53,6 +53,7 @@ public class BallDragControl : MonoBehaviour, IPoolable
         isDragging = true;
         positionHistory.Clear();
         AddPositionPoint(worldPosition);
+        AudioManager.PlaySfx(SfxId.BallGrab);
     }
 
     public void DragTo(Vector2 worldPosition)
@@ -70,9 +71,9 @@ public class BallDragControl : MonoBehaviour, IPoolable
 
         AddPositionPoint(worldPosition);
         Vector2 velocity = CalculateThrowVelocity();
-        rb.linearVelocity = velocity.magnitude >= minThrowSpeed
-            ? Vector2.ClampMagnitude(velocity * throwSpeedMultiplier, maxThrowSpeed)
-            : Vector2.zero;
+        bool thrown = velocity.magnitude >= minThrowSpeed;
+        rb.linearVelocity = thrown ? Vector2.ClampMagnitude(velocity * throwSpeedMultiplier, maxThrowSpeed) : Vector2.zero;
+        if (thrown) AudioManager.PlaySfx(SfxId.BallThrow, Mathf.Clamp01(rb.linearVelocity.magnitude / maxThrowSpeed));
 
         // Top bırakıldığında bağlı aynı renkteki topları kontrol et ve patlat
         if (matching != null) matching.CheckMatches();
